@@ -4,12 +4,21 @@ class Game {
     this.ctx = this.canvas.getContext('2d');
 
     this.ship = new Ship();
+    // this.asteroids = [new Asteroid(), new Asteroid(), new Asteroid()];
+    this.asteroids = []
+    for(let i = 0; i < 10; i++) {
+      this.asteroids.push(new Asteroid())
+    }
+
   }
   play() {
     setInterval(() => {
       this.resetCanvas();
       this.setBackground();
       this.ship.draw(this.ctx);
+      this.asteroids.forEach((asteroid) => {
+        asteroid.draw(this.ctx)
+      })
     }, 33)
   }
   resetCanvas() {
@@ -31,6 +40,10 @@ class Ship {
     this.power = 0
     this.velocity = {x: 0, y: 0}
     this.bullets = [];
+
+    //for ship onhit
+    this.hit = false;
+    this.radius = 4
 
     document.addEventListener('keydown', (event) => {
       console.log(event.keyCode)
@@ -145,6 +158,53 @@ class Ship {
     }
     if(this.y < 0) {
       this.y = 500
+    }
+  }
+
+  isHit(asteroid) {
+    return Math.sqrt((this.x - asteroid.x) ** 2 + (this.y - asteroid.y) ** 2) < this.radius + asteroid.radius
+  }
+}
+
+class Asteroid {
+  constructor() {
+    // hw can be how to fix for edge case
+    // we don't want circle to populate in the circle
+
+    this.x = Math.floor(Math.random() * 501)
+    this.y = Math.floor(Math.random() * 501)
+    this.radius = (Math.floor(Math.random() * 3) + 2) * 12
+    this.velocity = { x: Math.random() * 4 - 2, y: Math.random() * 4 - 2 }
+  }
+
+  draw(ctx) {
+    this.update()
+    ctx.strokeStyle = 'white'
+    ctx.lineWidth = 1.25
+    ctx.save()
+    ctx.beginPath()
+
+    ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI)
+    ctx.closePath()
+
+    ctx.stroke()
+    ctx.restore()
+  }
+  update() {
+    this.x += this.velocity.x
+    this.y += this.velocity.y
+
+    if(this.x > 500 + this.radius) {
+      this.x = 0 - this.radius
+    }
+    if(this.x < 0 - this.radius) {
+      this.x = 500 + this.radius
+    }
+    if(this.y > 500 + this.radius) {
+      this.y = 0 - this.radius
+    }
+    if(this.y < 0 - this.radius) {
+      this.y = 500 + this.radius
     }
   }
 }
