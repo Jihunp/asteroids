@@ -1,11 +1,12 @@
 class Game {
   constructor() {
     this.canvas = document.getElementById('asteroids-canvas');
-    this.ctx = this.canvas.getContext('2d');
+    this.ctx = this.canvas.getContext('2d'); 
 
+    this.shipHit = false;
     this.ship = new Ship();
-    // this.asteroids = [new Asteroid(), new Asteroid(), new Asteroid()];
-    this.asteroids = []
+
+    this.asteroids = [];
     for(let i = 0; i < 10; i++) {
       this.asteroids.push(new Asteroid())
     }
@@ -13,12 +14,16 @@ class Game {
   }
   play() {
     setInterval(() => {
-      this.resetCanvas();
-      this.setBackground();
-      this.ship.draw(this.ctx);
-      this.asteroids.forEach((asteroid) => {
-        asteroid.draw(this.ctx)
-      })
+      if(!this.shipHit) {        
+        this.resetCanvas();
+        this.setBackground();
+        
+        this.ship.draw(this.ctx);
+        this.asteroids.forEach((asteroid) => {
+          asteroid.draw(this.ctx)
+        })
+      }
+      this.update()
     }, 33)
   }
   resetCanvas() {
@@ -27,6 +32,14 @@ class Game {
   setBackground() {
     this.ctx.fillStyle = 'black'
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+  }
+
+  update() {
+    this.asteroids.forEach((asteroid) => {
+      if (this.ship.isHit(asteroid)) {
+        this.shipHit = true;
+      }
+    })
   }
 }
 
