@@ -8,6 +8,7 @@ class Ship {
     this.power = 0
     this.velocity = {x: 0, y: 0}
     this.isFiring = false;
+    this.bullets = []
 
     this.hit = false;
     this.radius = 4
@@ -24,8 +25,11 @@ class Ship {
         this.power = true
       }
       if(event.keyCode === 32) {
-        let bullet = new Bullet(this.x, this.y, this.angle)
-        this.isFiring = true;
+        if (!this.isFiring) {
+          this.isFiring = true
+          let bullet = new Bullet(this.x, this.y, this.angle)
+          this.bullets.push(bullet)
+        }
       }
     })
     
@@ -36,6 +40,9 @@ class Ship {
       }
       if(event.keyCode === 38) {
         this.power = false;
+      }
+      if (event.keyCode == 32) {
+        this.isFiring = false
       }
     })
 
@@ -96,6 +103,7 @@ class Ship {
   }
 
   isHit(asteroid) {
+    // return Math.sqrt((this.x - asteroid.x) ** 2 + (this.y - asteroid.y) ** 2) < this.radius + asteroid.radius
     return Math.sqrt((this.x - asteroid.x) ** 2 + (this.y - asteroid.y) ** 2) < this.radius + asteroid.radius
   }
 }

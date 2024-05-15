@@ -1,8 +1,8 @@
 class Bullet {
   constructor(x, y, angle) {
     this.angle = angle;
-    this.x = x + Math.sin(this.angle) * 10;
-    this.y = y - Math.cos(this.angle) * 10;
+    this.x = x + (Math.sin(this.angle) * 10);
+    this.y = y + (-Math.cos(this.angle) * 10);
     this.radius = 1;
   }
 
@@ -26,6 +26,6 @@ class Bullet {
   }
 
   isOutOfBounds() {
-    
+    return this.x < 0 || this.x > 500 || this.y < 0|| this.y > 500
   }
 }

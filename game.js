@@ -17,15 +17,14 @@ class Game {
       if(!this.shipHit) {        
         this.resetCanvas();
         this.setBackground();
-        
         this.ship.draw(this.ctx);
         this.asteroids.forEach((asteroid) => {
           asteroid.draw(this.ctx)
         })
         
-        // this.ship.bullets.forEach((bullet) => {
-        //   bullet.draw(this.ctx)
-        // })
+        this.ship.bullets.forEach((bullet) => {
+          bullet.draw(this.ctx)
+        })
 
       } else {
         this.ctx.font = '48px Arial';
@@ -53,9 +52,11 @@ class Game {
     })
     this.asteroids.forEach((asteroid) => {
       const asteroidIndex = this.asteroids.indexOf(asteroid)
+
       this.ship.bullets.forEach((bullet) => {
         const bulletIndex = this.ship.bullets.indexOf(bullet)
-        if (this.asteroid.isHit(bullet)) {
+
+        if (asteroid.isHit(bullet)) {
           this.asteroids.splice(asteroidIndex, 1)
           this.ship.bullets.splice(bulletIndex, 1)
         }
